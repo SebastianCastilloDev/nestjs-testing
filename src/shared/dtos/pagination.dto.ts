@@ -8,5 +8,9 @@ export class PaginationDto {
   @Min(1)
   page?: number;
 
+  @IsOptional()
+  @IsNumber()
+  @Type(() => Number)
+  @Min(1)
   limit?: number;
 }
