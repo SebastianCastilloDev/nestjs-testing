@@ -18,6 +18,11 @@ export class PokemonsService {
     const { limit, page } = paginationDto;
     const offset = (page - 1) * limit;
 
+    const cacheKey = `${limit}-${page}`;
+    if (this.paginatedPokemonsCache.has(cacheKey)) {
+      return this.paginatedPokemonsCache.get(cacheKey);
+    }
+
     const url = `https://pokeapi.co/api/v2/pokemon?limit=${limit}&${offset}`;
 
     const response = await fetch(url);
@@ -30,6 +35,7 @@ export class PokemonsService {
     });
 
     const pokemons = await Promise.all(pokemonPromises);
+    this.paginatedPokemonsCache.set(cacheKey, pokemons);
 
     console.log(this.paginatedPokemonsCache);
 
