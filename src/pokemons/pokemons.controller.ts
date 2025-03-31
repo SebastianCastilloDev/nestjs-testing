@@ -12,6 +12,7 @@ import { PokemonsService } from './pokemons.service';
 import { CreatePokemonDto } from './dto/create-pokemon.dto';
 import { UpdatePokemonDto } from './dto/update-pokemon.dto';
 import { PaginationDto } from 'src/shared/dtos/pagination.dto';
+import * as request from 'supertest';
 
 @Controller('pokemons')
 export class PokemonsController {
@@ -23,8 +24,15 @@ export class PokemonsController {
   }
 
   @Get()
-  findAll(@Query() paginationDto: PaginationDto) {
-    return paginationDto;
+  async findAll(@Query() paginationDto: PaginationDto) {
+    const { limit, page } = paginationDto;
+    const offset = (page - 1) * limit;
+
+    const url = `https://pokeapi.co/api/v2/pokemon?limit=${limit}&${offset}`;
+
+    const response = await fetch(url);
+    const data = await response.json();
+    return data;
   }
 
   @Get(':id')
