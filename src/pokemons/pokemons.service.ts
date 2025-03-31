@@ -37,8 +37,6 @@ export class PokemonsService {
     const pokemons = await Promise.all(pokemonPromises);
     this.paginatedPokemonsCache.set(cacheKey, pokemons);
 
-    console.log(this.paginatedPokemonsCache);
-
     return pokemons;
   }
 
